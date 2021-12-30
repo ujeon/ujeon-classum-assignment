@@ -1,14 +1,7 @@
-import React, {useMemo, useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  Dimensions,
-  LayoutChangeEvent,
-  Pressable,
-  StyleSheet,
-} from 'react-native';
-import {ItemImage, ItemHeader} from './styles';
+import React from 'react';
+import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {ItemHeader} from './styles';
+import RoundCornerImage from '@components/RoundCornerImage';
 
 interface MansonryItemProps {
   item: any;
@@ -19,35 +12,14 @@ const MasonryItem: React.FC<MansonryItemProps> = ({
   item,
   handleItemOnClick,
 }) => {
-  const randomBool = useMemo(() => Math.random() < 0.5, []);
-  const [height, setHeight] = useState(0);
-
-  useEffect(() => {}, [item.imgURL]);
-
   const handleOnPress = (id: any) => () => {
     handleItemOnClick(id);
-  };
-
-  const onImageLayout = (event: LayoutChangeEvent) => {
-    let {width} = event.nativeEvent.layout;
-    Image.getSize(item.imgURL, (srcWidth, srcHeight) => {
-      const maxHeight = Dimensions.get('window').height;
-      const maxWidth = width;
-      const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
-      setHeight(maxHeight * ratio);
-    });
   };
 
   return (
     <Pressable onPress={handleOnPress(item.id)}>
       <View key={item.id} style={styles.itemContainer}>
-        <ItemImage
-          source={{uri: item.imgURL}}
-          randomBool={randomBool}
-          resizeMode="cover"
-          height={height}
-          onLayout={onImageLayout}
-        />
+        <RoundCornerImage source={item.imgURL} />
         <ItemHeader>
           <Text>{item.text}</Text>
         </ItemHeader>
